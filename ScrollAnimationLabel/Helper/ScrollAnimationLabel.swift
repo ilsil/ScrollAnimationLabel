@@ -86,6 +86,13 @@ private extension ScrollAnimationLabel {
             let scrollLayer = CAScrollLayer()
             scrollLayer.scrollMode = .vertically
             scrollLayer.addSublayer(keywordLabel.layer)
+            
+            ///CALayer 속성 중 성능 향상에 도움이 되는 2가지
+            /// 1. shouldRasterize[Default - false] : CALayer를 그릴 때 한 번만 렌더링 할 건지에 대한 여부
+            /// 2.drawsAsynchronously[Default - false] : CALayer를 그릴 때 필요한 작업을 Background Thread에서 수행해야하는지 여부
+            /// 두 속성이 상반되는 옵션인 듯.. 정적으로 한번만 그려도 되는 layer는 shouldRasterize를 사용
+            /// 반복 애니메이션 같이 여러번 그릴 때는 drawsAsynchronously 를 사용
+            scrollLayer.drawsAsynchronously = true
             layer.addSublayer(scrollLayer)
             scrollLayer.frame = .init(
                 x: maxX,

@@ -112,22 +112,25 @@ private extension ScrollAnimationLabel {
         var offset:Double = .zero
         let maxY = Double(size?.height ?? .zero)
         for scrollLayer in scrollLayers {
+            let groupAnimation = CAAnimationGroup()
             let currentDuration = duration + offset
             let animation = createAnimation(
                 keyPath: "sublayerTransform.translation.y",
                 fromValue: -(currentDuration*maxY/duration), // 같은 속력으로 표현될 수 있도록 늘어난 시간만큼 시작 위치 조정
-                toValue: 0,
-                duration: currentDuration
+                toValue: 0
             )
             let fadeInAnimation = createAnimation(
                 keyPath: "opacity",
                 fromValue: 0.0,
-                toValue: 1.0,
-                duration: currentDuration
+                toValue: 1.0
             )
+            fadeInAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            
+            groupAnimation.animations = [animation, fadeInAnimation]
+            groupAnimation.duration = currentDuration
+            
             offset += Constants.interval
-            scrollLayer.add(fadeInAnimation, forKey: nil)
-            scrollLayer.add(animation, forKey: nil)
+            scrollLayer.add(groupAnimation, forKey: nil)
         }
     }
     
@@ -144,9 +147,9 @@ private extension ScrollAnimationLabel {
             let animation = createAnimation(
                 keyPath: "sublayerTransform.translation.y",
                 fromValue: -maxY,
-                toValue: maxY,
-                duration: Constants.repeatDuration
+                toValue: maxY
             )
+            animation.duration = Constants.repeatDuration
             animation.repeatCount = .infinity
             DispatchQueue.main.asyncAfter(deadline: .now()+offset) {
                 scrollLayer.isHidden = false
@@ -159,13 +162,11 @@ private extension ScrollAnimationLabel {
     func createAnimation(
         keyPath: String,
         fromValue: Double,
-        toValue: Double,
-        duration: TimeInterval
+        toValue: Double
     ) -> CABasicAnimation {
         let animation = CABasicAnimation(keyPath: keyPath)
         animation.fromValue = fromValue
         animation.toValue = toValue
-        animation.duration = duration
         return animation
     }
 }

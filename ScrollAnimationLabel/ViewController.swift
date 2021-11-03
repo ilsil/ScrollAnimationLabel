@@ -13,6 +13,7 @@ class ViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .darkGray
         label.textAlignment = .center
+        label.font = .systemFont(ofSize: 20)
         return label
     }()
     
@@ -22,7 +23,7 @@ class ViewController: UIViewController {
         
         animationLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
         animationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        animationLabel.animate(withAmount: 71691203824789124, isRepeating: true)
+        animationLabel.animate(withAmount: 7169120382478912, isRepeating: true)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(finishAnimation))
         view.addGestureRecognizer(tap)

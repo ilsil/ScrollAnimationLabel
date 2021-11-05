@@ -147,10 +147,10 @@ private extension ScrollAnimationLabel {
     
     func repeatAnimation() {
         CATransaction.begin()
-        makeFadeOutAnimation()
         CATransaction.setCompletionBlock { [weak self] in
             self?.makeFadeInAnimation()
         }
+        makeFadeOutAnimation()
         CATransaction.commit()
     }
     
